@@ -1,7 +1,19 @@
 # This is a comment
-+**-;   ;+
-+++++
------
-;;;;; ; ; ; ;
-245 + 4 * 56 + 3.462
-:= < >= <= == ~= ~ ;
+# +**-;   ;+
+# +++++
+# -----
+# ;;;;; ; ; ; ;
+# 245 + 4 * 56 + 3.462
+# := < >= <= == ~= ~ ;
+
+# initialize the variable
+pi := 3.14159
+x := 8.23
+
+if x >= 0 then
+    println("x is positive")
+else
+    println("x is negative")
+end
+
+# 'This is a string that does not end -> testing if the quote not close

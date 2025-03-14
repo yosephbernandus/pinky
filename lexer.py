@@ -15,6 +15,8 @@ class Lexer:
         return ch
 
     def peek(self):
+        if self.curr >= len(self.source):
+            return "\0"
         return self.source[self.curr]
 
     def lookahead(self, n=1):
@@ -45,6 +47,19 @@ class Lexer:
             self.add_token(TOK_FLOAT)
         else:
             self.add_token(TOK_INTEGER)
+
+    def handle_string(self, start_quote):
+        while self.peek() != start_quote and not (self.curr >= len(self.source)):
+            self.advance()
+        if self.curr >= len(self.source):
+            raise SyntaxError(f"[Line {self.line}] Unterminated string.")
+        self.advance()  # Consume the closing quote
+        self.add_token(TOK_STRING)
+
+    def handle_identifier(self):
+        while self.peek().isalnum() or self.peek() == "_":
+            self.advance()
+        self.add_token(TOK_IDENTIFIER)
 
     def tokenize(self):
         while self.curr < len(self.source):
@@ -116,9 +131,14 @@ class Lexer:
                     self.add_token(TOK_ASSIGN)
                 else:
                     self.add_token(TOK_COLON)
+            elif ch == '"' or ch == "'":
+                self.handle_string(ch)
             elif ch.isdigit():
                 self.handle_number()
-            elif # TODO: handle string() --> "something" or 'something'
+            elif ch.isalpha() or ch == "_":
+                self.handle_identifier()
+
+            # TODO: handle string() --> "something" or 'something'
             # TODO: Check if it is a digit, then perform the logic of reading either an integer or a float
             # TODO: Check if its is a ' then perform the lofic of reading a string token
             # TODO: Check if it is a alpha character (a letter), or _, then we must handle and identifer
