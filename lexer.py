@@ -105,7 +105,19 @@ class Lexer:
             elif ch == "^":
                 self.add_token(TOK_CARET)
             elif ch == "/":
-                self.add_token(TOK_SLASH)
+                if self.match("*"):
+                    while not (self.peek() == "*" and self.lookahead() == "/") and not (
+                        self.curr >= len(self.source)
+                    ):
+                        if self.peek() == "\n":
+                            self.line += 1
+                        self.advance()
+                    if self.curr >= len(self.source):
+                        raise SyntaxError(f"[Line {self.line}] Unterminated comment.")
+                    self.advance()  # Consume the '*'
+                    self.advance()  # Consume the '/'
+                else:
+                    self.add_token(TOK_SLASH)
             elif ch == ";":
                 self.add_token(TOK_SEMICOLON)
             elif ch == "?":
