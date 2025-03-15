@@ -100,8 +100,6 @@ class Lexer:
                 self.add_token(TOK_COMMA)
             elif ch == "+":
                 self.add_token(TOK_PLUS)
-            elif ch == "-":
-                self.add_token(TOK_MINUS)
             elif ch == "*":
                 self.add_token(TOK_STAR)
             elif ch == "^":
@@ -114,6 +112,12 @@ class Lexer:
                 self.add_token(TOK_QUESTION)
             elif ch == "%":
                 self.add_token(TOK_MOD)
+            elif ch == "-":
+                if self.match("-"):
+                    while self.peek() != "\n" and not (self.curr >= len(self.source)):
+                        self.advance()
+                else:
+                    self.add_token(TOK_MINUS)
             elif ch == "=":
                 if self.match("="):
                     self.add_token(TOK_EQ)
@@ -143,6 +147,10 @@ class Lexer:
                 self.handle_number()
             elif ch.isalpha() or ch == "_":
                 self.handle_identifier()
+            else:
+                raise SyntaxError(
+                    f'Error at line {self.line}: Unexpected character "{ch}"'
+                )
 
             # TODO: handle string() --> "something" or 'something'
             # TODO: Check if it is a digit, then perform the logic of reading either an integer or a float
