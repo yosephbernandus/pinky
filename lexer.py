@@ -10,18 +10,29 @@ class Lexer:
         self.tokens = []
 
     def advance(self):
+        # Increment the current pointer and return the character at the new position
         ch = self.source[self.curr]
+
+        # Increment the current pointer
         self.curr = self.curr + 1
+
+        # Return the character at the new position
         return ch
 
     def peek(self):
+        # If we are at the end of the source, return a null character
         if self.curr >= len(self.source):
             return "\0"
+
+        # source[curr] is the current character
         return self.source[self.curr]
 
     def lookahead(self, n=1):
+        # If we are at the end of the source, return a null character
         if self.curr >= len(self.source):
             return "\0"
+
+        # current + n is the index of the character we want to look at
         return self.source[self.curr + n]
 
     def match(self, expected):
@@ -132,6 +143,8 @@ class Lexer:
                     self.add_token(TOK_MINUS)
             elif ch == "=":
                 if self.match("="):
+                    self.add_token(TOK_EQEQ)
+                else:
                     self.add_token(TOK_EQ)
             elif ch == "~":
                 if self.match("="):

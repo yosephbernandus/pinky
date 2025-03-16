@@ -1,4 +1,5 @@
 import sys
+from parser import *
 from tokens import *
 from lexer import *
 
@@ -16,3 +17,6 @@ if __name__ == "__main__":
         for tok in tokens:
             print(tok)
 
+        print("PARSED AST:")
+        ast = Parser(tokens).parse()
+        print(ast)
