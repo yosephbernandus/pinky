@@ -1,9 +1,9 @@
-from tokens import Token
+from tokens import *
 
 
 class Expr:
     """
-    Expressions evaluate tp a result, like x + (3 * y) >= 6
+    Expressions evaluate to a result, like x + (3 * y) >= 6
     """
 
     pass
@@ -27,12 +27,12 @@ class Integer(Expr):
         self.value = value
 
     def __repr__(self):
-        return f"Integer({self.value})"
+        return f"Integer[{self.value}]"
 
 
 class Float(Expr):
     """
-    Example: 3.14
+    Example: 3.141592
     """
 
     def __init__(self, value):
@@ -40,12 +40,12 @@ class Float(Expr):
         self.value = value
 
     def __repr__(self):
-        return f"Float({self.value})"
+        return f"Float[{self.value}]"
 
 
 class UnOp(Expr):
     """
-    Example: -x (-operand)
+    Example: -operand
     """
 
     def __init__(self, op: Token, operand: Expr):
@@ -77,10 +77,10 @@ class BinOp(Expr):
 
 class Grouping(Expr):
     """
-    Example: (x + y) or (<expr>)
+    Example: ( <expr> )
     """
 
-    def __init__(self, value: Expr):
+    def __init__(self, value):
         assert isinstance(value, Expr), value
         self.value = value
 
@@ -88,13 +88,11 @@ class Grouping(Expr):
         return f"Grouping({self.value})"
 
 
-class WhileStmt(Stmt):
-    """ """
-
+def WhileStmt(Stmt):
+    # TODO:
     pass
 
 
-class AssignStmt(Stmt):
-    """ """
-
+def Assignment(Stmt):
+    # TODO:
     pass
