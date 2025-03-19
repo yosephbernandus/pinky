@@ -54,14 +54,13 @@ TOK_PRINT = "TOK_PRINT"
 TOK_PRINTLN = "TOK_PRINTLN"
 TOK_RET = "TOK_RET"
 
-
 ###############################################################################
 # Dictionary mapping keywords and their token types
 ###############################################################################
 keywords = {
     "if": TOK_IF,
-    "then": TOK_THEN,
     "else": TOK_ELSE,
+    "then": TOK_THEN,
     "true": TOK_TRUE,
     "false": TOK_FALSE,
     "and": TOK_AND,
@@ -89,3 +88,4 @@ class Token:
 
     def __repr__(self):
         return f"({self.token_type}, {self.lexeme!r}, {self.line})"
+
