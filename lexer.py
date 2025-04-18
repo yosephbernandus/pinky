@@ -1,4 +1,5 @@
 from tokens import *
+from utils import lexing_error
 
 
 class Lexer:
@@ -63,7 +64,7 @@ class Lexer:
         while self.peek() != start_quote and not (self.curr >= len(self.source)):
             self.advance()
         if self.curr >= len(self.source):
-            raise SyntaxError(f"[Line {self.line}] Unterminated string.")
+            lexing_error(f"Unterminated string.", self.line)
         self.advance()  # Consume the closing quote
         self.add_token(TOK_STRING)
 
@@ -124,7 +125,7 @@ class Lexer:
                             self.line += 1
                         self.advance()
                     if self.curr >= len(self.source):
-                        raise SyntaxError(f"[Line {self.line}] Unterminated comment.")
+                        lexing_error(f"Unterminated comment.", self.line)
                     self.advance()  # Consume the '*'
                     self.advance()  # Consume the '/'
                 else:
@@ -173,9 +174,7 @@ class Lexer:
             elif ch.isalpha() or ch == "_":
                 self.handle_identifier()
             else:
-                raise SyntaxError(
-                    f'Error at line {self.line}: Unexpected character "{ch}"'
-                )
+                lexing_error(f"Error at {ch!r}: Unexpected character", self.line)
 
             # TODO: handle string() --> "something" or 'something'
             # TODO: Check if it is a digit, then perform the logic of reading either an integer or a float
