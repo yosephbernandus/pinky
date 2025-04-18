@@ -2,7 +2,7 @@ import sys
 from tokens import *
 from lexer import *
 from parser import *
-from utils import print_pretty_ast
+from utils import Colors, print_pretty_ast
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -12,21 +12,21 @@ if __name__ == "__main__":
     with open(filename) as file:
         source = file.read()
 
-        print(f"***************************************")
-        print(f"SOURCE:")
-        print(f"***************************************")
+        print(f"{Colors.GREEN}***************************************{Colors.WHITE}")
+        print(f"{Colors.GREEN}SOURCE:{Colors.WHITE}")
+        print(f"{Colors.GREEN}***************************************{Colors.WHITE}")
         print(source)
 
-        print(f"***************************************")
-        print(f"LEXER:")
-        print(f"***************************************")
+        print(f"{Colors.GREEN}***************************************{Colors.WHITE}")
+        print(f"{Colors.GREEN}TOKENS:{Colors.WHITE}")
+        print(f"{Colors.GREEN}***************************************{Colors.WHITE}")
         tokens = Lexer(source).tokenize()
         for tok in tokens:
             print(tok)
 
         print()
-        print(f"***************************************")
-        print(f"PARSED AST:")
-        print(f"***************************************")
+        print(f"{Colors.GREEN}***************************************{Colors.WHITE}")
+        print(f"{Colors.GREEN}AST:{Colors.WHITE}")
+        print(f"{Colors.GREEN}***************************************{Colors.WHITE}")
         ast = Parser(tokens).parse()
         print_pretty_ast(ast)
