@@ -56,22 +56,26 @@ class Parser:
     # <primary>  ::=  <integer> | <float> | '(' <expr> ')'
     def primary(self):
         if self.match(TOK_INTEGER):
-            return Integer(int(self.previous_token().lexeme))
+            return Integer(
+                int(self.previous_token().lexeme), line=self.previous_token().line
+            )
         if self.match(TOK_FLOAT):
-            return Float(float(self.previous_token().lexeme))
+            return Float(
+                float(self.previous_token().lexeme), line=self.previous_token().line
+            )
         if self.match(TOK_LPAREN):
             expr = self.expr()
             if not self.match(TOK_RPAREN):
                 parse_error(f'Error: ")" expected.', self.previous_token().line)
             else:
-                return Grouping(expr)
+                return Grouping(expr, line=self.previous_token().line)
 
     # <unary>  ::=  ('+'|'-'|'~') <unary>  |  <primary>
     def unary(self):
         if self.match(TOK_NOT) or self.match(TOK_MINUS) or self.match(TOK_PLUS):
             op = self.previous_token()
             operand = self.unary()
-            return UnOp(op, operand)
+            return UnOp(op, operand, line=self.previous_token().line)
         return self.primary()
 
     # <factor>  ::=  <unary>
@@ -84,7 +88,7 @@ class Parser:
         while self.match(TOK_STAR) or self.match(TOK_SLASH):
             op = self.previous_token()
             right = self.factor()
-            expr = BinOp(op, expr, right)
+            expr = BinOp(op, expr, right, line=self.previous_token().line)
         return expr
 
     # <expr>  ::=  <term> ( ('+'|'-') <term> )*
@@ -93,7 +97,7 @@ class Parser:
         while self.match(TOK_PLUS) or self.match(TOK_MINUS):
             op = self.previous_token()
             right = self.term()
-            expr = BinOp(op, expr, right)
+            expr = BinOp(op, expr, right, line=self.previous_token().line)
         return expr
 
     def parse(self):
