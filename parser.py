@@ -53,7 +53,11 @@ class Parser:
         )  # If it is a match, we return True and also comsume that token
         return True
 
-    # <primary>  ::=  <integer> | <float> | '(' <expr> ')'
+    # <primary>  ::=  <integer>
+    #              |  <float>
+    #              |  <bool>
+    #              |  <string>
+    #              |  '(' <expr> ')'
     def primary(self):
         if self.match(TOK_INTEGER):
             return Integer(
