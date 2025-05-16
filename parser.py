@@ -63,11 +63,19 @@ class Parser:
             return Integer(
                 int(self.previous_token().lexeme), line=self.previous_token().line
             )
-        if self.match(TOK_FLOAT):
+        elif self.match(TOK_FLOAT):
             return Float(
                 float(self.previous_token().lexeme), line=self.previous_token().line
             )
-        if self.match(TOK_LPAREN):
+        elif self.match(TOK_TRUE):
+            return Bool(True, line=self.previous_token().line)
+        elif self.match(TOK_FALSE):
+            return Bool(False, line=self.previous_token().line)
+        elif self.match(TOK_STRING):
+            return String(
+                str(self.previous_token().lexeme[1:-1]), line=self.previous_token().line
+            )  # Remote the quotes at the beginning and end at the string lexeme
+        elif self.match(TOK_LPAREN):
             expr = self.expr()
             if not self.match(TOK_RPAREN):
                 parse_error(f'Error: ")" expected.', self.previous_token().line)
