@@ -1,3 +1,3 @@
 run:
-	python3 pinky.py scripts/myscript2.pinky
+	python3 pinky.py scripts/myscript4.pinky
 
