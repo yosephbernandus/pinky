@@ -1,6 +1,6 @@
+from utils import *
 from tokens import *
 from model import *
-from utils import parse_error
 
 
 class Parser:
@@ -27,10 +27,6 @@ class Parser:
                 f"Found {self.previous_token().lexeme!r} at the end of parsing",
                 self.previous_token().line,
             )
-
-            # raise SyntaxError(
-            #     f"Found {self.previous_token().lexeme!r} at the end of parsing"
-            # )
         elif self.peek().token_type == expected_type:
             token = self.advance()
             return token
@@ -57,7 +53,7 @@ class Parser:
     #              |  <float>
     #              |  <bool>
     #              |  <string>
-    #              |  '(' <expr> ')'
+    #              | '(' <expr> ')'
     def primary(self):
         if self.match(TOK_INTEGER):
             return Integer(
@@ -74,7 +70,7 @@ class Parser:
         elif self.match(TOK_STRING):
             return String(
                 str(self.previous_token().lexeme[1:-1]), line=self.previous_token().line
-            )  # Remote the quotes at the beginning and end at the string lexeme
+            )  # Remove the quotes at the beginning and at the end of the lexeme
         elif self.match(TOK_LPAREN):
             expr = self.expr()
             if not self.match(TOK_RPAREN):
@@ -82,21 +78,28 @@ class Parser:
             else:
                 return Grouping(expr, line=self.previous_token().line)
 
-    # <unary>  ::=  ('+'|'-'|'~') <unary>  |  <primary>
-    def unary(self):
-        if self.match(TOK_NOT) or self.match(TOK_MINUS) or self.match(TOK_PLUS):
-            op = self.previous_token()
-            operand = self.unary()
-            return UnOp(op, operand, line=self.previous_token().line)
-        return self.primary()
+    # <exponent> ::= <primary> ( "^" <primary> )*
+    def exponent(self):
+        # TODO:
+        pass
 
-    # <multiplication>  ::=  <unary> ( ('*'|'/') <unary> )*
+    # <unary>  ::=  ('+'|'-'|'~')* <exponent>
+    def unary(self):
+        # TODO:
+        pass
+
+    # <modulo> ::= <unary> ( "%" <unary> )*
+    def modulo(self):
+        # TODO:
+        pass
+
+    # <multiplication>  ::=  <modulo> ( ('*'|'/') <modulo> )*
     def multiplication(self):
         expr = self.unary()
         while self.match(TOK_STAR) or self.match(TOK_SLASH):
             op = self.previous_token()
             right = self.unary()
-            expr = BinOp(op, expr, right, line=self.previous_token().line)
+            expr = BinOp(op, expr, right, self.previous_token().line)
         return expr
 
     # <addition>  ::=  <multiplication> ( ('+'|'-') <multiplication> )*
@@ -108,8 +111,32 @@ class Parser:
             expr = BinOp(op, expr, right, line=self.previous_token().line)
         return expr
 
+    # <comparison> ::= <addition> (( ">" | ">=" | "<" | "<=" ) <addition>)*
+    def comparison(self):
+        # TODO:
+        pass
+
+    # <equality>  ::=  <comparison> ( ( "~=" | "==" ) <comparison> )*
+    def equality(self):
+        # TODO:
+        pass
+
     def expr(self):
-        return self.addition()
+        #################################################################
+        # TODO:
+        # Your goal is to change the parser to allow expressions with
+        # comparison (>, <, >=, <=), equality (==, ~=), % and ^.
+        # Starting at expr(), the order of calls is:
+        # 1. equality()
+        # 2. comparison()
+        # 3. addition()
+        # 4. multiplication()
+        # 5. modulo()
+        # 6. unary()
+        # 7. exponent()
+        # 8. primary()
+        #################################################################
+        return self.equality()
 
     def parse(self):
         ast = self.expr()
